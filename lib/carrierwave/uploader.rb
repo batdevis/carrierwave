@@ -8,6 +8,7 @@ require "carrierwave/uploader/mountable"
 require "carrierwave/uploader/cache"
 require "carrierwave/uploader/store"
 require "carrierwave/uploader/download"
+require "carrierwave/uploader/encoded"
 require "carrierwave/uploader/remove"
 require "carrierwave/uploader/extension_whitelist"
 require "carrierwave/uploader/extension_blacklist"
@@ -50,6 +51,7 @@ module CarrierWave
       include CarrierWave::Uploader::Cache
       include CarrierWave::Uploader::Store
       include CarrierWave::Uploader::Download
+      include CarrierWave::Uploader::Encoded
       include CarrierWave::Uploader::Remove
       include CarrierWave::Uploader::ExtensionWhitelist
       include CarrierWave::Uploader::ExtensionBlacklist

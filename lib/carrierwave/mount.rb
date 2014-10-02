@@ -81,6 +81,9 @@ module CarrierWave
     # [remote_image_url]        Returns previously cached remote url
     # [remote_image_url=]       Retrieve the file from the remote url
     #
+    # [encoded_image]           Returns previously cached base64 string
+    # [encoded_image=]          Create file from base64 string
+    #
     # [remove_image]            An attribute reader that can be used with a checkbox to mark a file for removal
     # [remove_image=]           An attribute writer that can be used with a checkbox to mark a file for removal
     # [remove_image?]           Whether the file should be removed when store_image! is called.
@@ -185,6 +188,14 @@ module CarrierWave
 
         def remote_#{column}_url=(url)
           _mounter(:#{column}).remote_url = url
+        end
+
+       def encoded_#{column}
+          _mounter(:#{column}).encoded
+        end
+
+        def encoded_#{column}=(value)
+          _mounter(:#{column}).encoded = value
         end
 
         def remove_#{column}
@@ -295,7 +306,7 @@ module CarrierWave
     # this is an internal class, used by CarrierWave::Mount so that
     # we don't pollute the model with a lot of methods.
     class Mounter #:nodoc:
-      attr_reader :column, :record, :remote_url, :integrity_error, :processing_error, :download_error
+      attr_reader :column, :record, :remote_url, :encoded, :integrity_error, :processing_error, :download_error
       attr_accessor :remove
 
       def initialize(record, column, options={})
@@ -364,6 +375,14 @@ module CarrierWave
       rescue CarrierWave::IntegrityError => e
         @integrity_error = e
         raise e unless option(:ignore_integrity_errors)
+      end
+
+     def encoded=(value)
+        return if value.blank?
+
+        @encoded = value
+
+        uploader.decode!(value)
       end
 
       def store!
