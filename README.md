@@ -386,6 +386,15 @@ failures automatically with attribute validation errors. If you aren't, or you
 disable CarrierWave's `validate_download` option, you'll need to handle those
 errors yourself.
 
+## Create file from base64 encoding string
+
+It's useful for API.
+
+filepath = "/an/example/jpg/image.jpg"
+u=User.find 12
+enc = Base64.encode64 File.open(filepath).read
+u.encoded_card = enc
+
 ## Providing a default URL
 
 In many cases, especially when working with images, it might be a good idea to
